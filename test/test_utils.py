@@ -415,6 +415,7 @@ class TestCheckpoint(TestCase):
         self.assertEqual(t1, res[6])
 
     def test_checkpoint_partial_grad(self):
+        self.assertEqual(1, 2)
         def run_fn(tensor1, tensor2):
             # tensor 2 is used for other application logic
             return tensor1, tensor2
