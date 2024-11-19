@@ -311,7 +311,6 @@ def aot_dispatch_autograd_graph(
 
     # There should be *NO* mutating ops in the graph at this point.
     assert_functional_graph(fx_g.graph)
-
     # Redundant with the check above, but worth having in case tracing introduced
     # a fake tensor. Unlikely.
     # See Note: [Fake Modules and AOTAutograd]
@@ -327,4 +326,5 @@ def aot_dispatch_autograd_graph(
         assert (
             maybe_subclass_meta is None
         ), "aot_export_module does not support tensor subclass inputs for now."
+
     return fx_g, saved_updated_joint_inputs, maybe_subclass_meta
