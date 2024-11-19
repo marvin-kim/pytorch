@@ -41,6 +41,16 @@ ReductionType = Literal[
 ]
 
 
+def is_math_reduction(reduction_type: ReductionType) -> bool:
+    return reduction_type in [
+        "welford_reduce",
+        "welford_combine",
+        "prod",
+        "sum",
+        "xor_sum",
+    ]
+
+
 def _arg_str(a) -> str:
     if isinstance(a, sympy.Expr):
         return sympy_str(a)
