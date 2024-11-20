@@ -1091,12 +1091,24 @@ class TritonHOPifier:
                 and (
                     # pre_hook requires running arbitrary code at runtime, which we cannot handle at this time
                     # https://github.com/pytorch/pytorch/issues/139059
-                    # Check Config passed to autotuner in configs
-                    any(cfg.pre_hook is not None for cfg in kernel.configs)
+                    # we can't support pre_hook or post_hook in user defined triton kernels at the moment,
+                    # as they require the ability to execute code at runtime (AOTI can't support this)
+                    (
+                        hasattr(kernel, "user_defined_pre_hook")
+                        and kernel.user_defined_pre_hook is not None
+                    )
+                    or (
+                        hasattr(kernel, "user_defined_post_hook")
+                        and kernel.user_defined_post_hook is not None
+                    )
+                    or (
+                        # Check Config passed to autotuner in configs
+                        any(cfg.pre_hook is not None for cfg in kernel.configs)
+                    )
                 )
             ):
                 self.raise_unsupported(
-                    "pre_hook is not supported in triton.Autotune Configs"
+                    "pre_hook and post_hook are not supported in triton.Autotune or triton.Config"
                 )
 
     def call_getitem(
